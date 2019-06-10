@@ -1,22 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
-<script src="./node_modules/vue/dist/vue.js"></script>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<script src="node_modules/vue/dist/vue.js"></script>
 <body>
 <div id="app">
-    <h2>{{name}}很好</h2>
+    <input  type="text" v-model="num">
+    <input  type="text" >
+    <input  type="text" v-model="name" >
+    <button @click="num++">点我</button>
+    <h2>
+        {{name}}很好,
+        {{num}}个人
+    </h2>
 </div>
 
-<script type="text/javascript">
-    var app = new Vue({
-        el: "#app",
-        data: {
-            name: "haha"
-        }
-    })
+<script >
+    const app = new Vue({
+        el:"#app",
+        data:{
+            name:"121"
+        },
+
+
+
+        
+    });
 
 </script>
 
