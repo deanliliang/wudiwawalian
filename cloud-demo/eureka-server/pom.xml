@@ -21,7 +21,7 @@
             <artifactId>mapper-spring</artifactId>
             <version>1.1.5</version>
         </dependency>
-        <!-- Eureka客户端 服务端已经有了 -->
+         <!--Eureka客户端 服务端已经有了-->
         <!--<dependency>-->
             <!--<groupId>org.springframework.cloud</groupId>-->
             <!--<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->

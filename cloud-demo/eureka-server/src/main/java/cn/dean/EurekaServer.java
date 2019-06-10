@@ -16,7 +16,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  */
 @SpringBootApplication
 @EnableEurekaServer // 声明这个应用是一个EurekaServer
-@MapperScan("cn.dean.mapper")
+//@MapperScan("cn.dean.mapper")
 public class EurekaServer {
     public static void main(String[] args) {
         SpringApplication.run(EurekaServer.class, args);
