@@ -1,0 +1,28 @@
+server:
+  port: 10010 #服务端口
+spring:
+  application:
+    name: api-gateway #指定服务名
+#zuul:
+#  routes:
+#    user-service: # 这里是路由id，随意写
+#      path: /user-service/** # 这里是映射路径
+#      url: http://127.0.0.1:8081 # 映射路径对应的实际url地址
+
+#zuul:
+#  routes:
+#    user-service: # 这里是路由id，随意写
+#      path: /user-service/** # 这里是映射路径
+#      serviceId: user-service # 指定服务名称
+
+zuul:
+  prefix: /api
+  routes:
+    user-service:
+      path: /user/**
+      serviceId: user-service
+      strip-prefix: false # 是否在转发时，去除路由前缀，这里不去除，映射路径中的user就会继续转发
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
