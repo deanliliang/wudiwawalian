@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="node_modules/vue/dist/vue.js"></script>
+<body>
+<div id="app">
+    <input type="text" v-model="user.name">
+    <input type="text" v-model="user.age"><button @click="user.age++">+</button> <br>
+
+</div>
+<script>
+    const app = new Vue ({
+        el: "#app",
+        data: {
+            user: {
+                name: "",
+                age: ""
+            }
+        },
+        watch: {
+            user: {
+                deep: true,
+                handler(val){
+                    console.log(val.name, val.age);
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

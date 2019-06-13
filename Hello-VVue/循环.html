@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="node_modules/vue/dist/vue.js"></script>
+<body>
+<div id="app">
+    <button @click="show=!show">切换性别</button>
+    <h2 v-if="show"></h2>
+       <input type="text" v-model="gen"/>男女
+<h1>{{gen}}</h1>
+    <ul>
+        <li v-for="(user,index) in users" v-if="user.gender==='女'">
+            {{user.name}},{{user.gender}},{{user.age}},{{index}}
+
+        </li>
+    </ul>
+    <h1 v-show="ok">Hello!</h1>哈哈
+</div>
+
+<script>
+    const app = new Vue({
+            el: "#app",
+            data: {
+                users:[
+                    {name:'柳岩', gender:'女', age: 21},
+                    {name:'虎哥', gender:'男', age: 30},
+                    {name:'范冰冰', gender:'女', age: 24},
+                    {name:'刘亦菲', gender:'男', age: 18},
+                    {name:'古力娜扎', gender:'女', age: 25}
+                ],
+                show:true,
+                gen:"男"
+
+            },
+        }
+    );
+</script>
+</body>
+</html>

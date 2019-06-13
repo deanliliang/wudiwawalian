@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<body>
+<div id="app">
+
+    {{birth}}
+</div>
+
+<script>
+    const app = new Vue({
+        el:"#app",
+        data:{
+            birthday:1919923128818,
+        },
+        computed:{
+            birth(){
+                const d = new Date(this.birthday);
+                return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+            }
+        }
+    })
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style type="text/css">
+    #box {
+        width: 100px;
+        height: 100px;
+        color: darkgray;
+        border: 1px solid red;
+    }
+    .red{
+        background-color: red;
+    }
+    .blue{
+        background-color: blue;
+    }
+</style>
+
+<body>
+<div id="app">
+    <!--<button @click="color='red'">红</button>-->
+    <!--<button @click="color='blue'">蓝</button>-->
+    <!--<div id="box" :class="color">-->
+        <!--点击按钮，背景会切换颜色哦-->
+    <!--</div>-->
+    <button @click="boo=!boo">自动切换</button>
+    <div id="box" :class="{red:boo,blue:!boo}">
+        点击按钮，背景会切换颜色哦
+    </div>
+</div>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript">
+    const vm = new Vue({
+        el: "#app",
+        data: {
+            color: "red", // 代表当前的class样式，目前是红
+            boo:true,
+        }
+    })
+</script>
+</body>
+</html>
