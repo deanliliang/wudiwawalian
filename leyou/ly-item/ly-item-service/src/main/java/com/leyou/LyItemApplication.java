@@ -17,7 +17,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication //spring启动项
 @EnableDiscoveryClient //让注册中心扫描发现 提供服务
-@MapperScan("com.leyou.mapper") //扫描Mapper类
+@MapperScan("com.leyou.mappers") //扫描Mapper类
 public class LyItemApplication {
 
     public static void main(String[] args) {

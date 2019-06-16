@@ -1,10 +1,10 @@
-package com.leyou.mapper;
+package com.leyou.mappers;
 import com.leyou.bean.Category;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
  * @ProjectName: leyou
- * @Package: com.leyou.mapper
+ * @Package: com.leyou.mappers
  * @ClassName: CategoryMapper
  * @Author: Dean
  * @Description: TK 通用mapper

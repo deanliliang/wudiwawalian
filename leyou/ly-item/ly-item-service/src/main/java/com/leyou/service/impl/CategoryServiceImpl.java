@@ -4,13 +4,12 @@ import com.leyou.bean.Category;
 import com.leyou.dto.CategoryDTO;
 import com.leyou.enums.ExceptionEnum;
 import com.leyou.exception.LyException;
-import com.leyou.mapper.CategoryMapper;
+import com.leyou.mappers.CategoryMapper;
 import com.leyou.service.CategoryService;
 import com.leyou.utils.BeanHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 

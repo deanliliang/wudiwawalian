@@ -18,3 +18,8 @@ eureka:
 logging:
   level:
     com.leyou: debug
+mybatis:
+  type-aliases-package: com.leyou.bean
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: mappers/*.xml

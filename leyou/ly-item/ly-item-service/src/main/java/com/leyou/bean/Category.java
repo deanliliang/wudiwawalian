@@ -22,4 +22,5 @@ public class Category {
 	private Integer sort;
 	private Date createTime;
 	private Date updateTime;
+
 }
