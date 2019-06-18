@@ -3,6 +3,7 @@ package com.leyou.mappers;
 import com.leyou.bean.Brand;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
+import tk.mybatis.spring.annotation.MapperScan;
 
 import java.util.List;
 
@@ -15,7 +16,6 @@ import java.util.List;
  * @Date: 2019/6/16 22:03
  * @Version: 1.0
  */
-
 public interface BrandMapper extends Mapper<Brand> {
     /**
      *
@@ -23,5 +23,8 @@ public interface BrandMapper extends Mapper<Brand> {
      * @param ids
      * @return
      */
-    int saveCategoryAndBrand(@Param("id") Integer id, @Param("ids") List<Integer> ids);
+    int saveCategoryAndBrand(@Param("bid") Long id, @Param("ids") List<Long> ids);
+
+    Integer deleteByBid(@Param("id") Long dtoId);
+
 }

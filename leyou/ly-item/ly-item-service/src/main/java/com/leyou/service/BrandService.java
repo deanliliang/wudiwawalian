@@ -30,5 +30,19 @@ public interface BrandService {
      * @param brandDTO
      * @param ids
      */
-    void addBrandByIds(BrandDTO brandDTO, List<Integer> ids);
+    void saveBrandByIds(BrandDTO brandDTO, List<Long> ids);
+
+    /**
+     * 根据信息删除
+     * @param id
+     */
+    void deleteBrandById(String id);
+
+    /**
+     * 根据信息查询
+     * @param id
+     */
+    BrandDTO queryBrandById(Long id);
+
+    void updateBrandByBrandmsg(Brandmsg brandmsg);
 }

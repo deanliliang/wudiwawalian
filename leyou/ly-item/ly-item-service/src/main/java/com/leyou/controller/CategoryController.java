@@ -1,11 +1,19 @@
 package com.leyou.controller;
 
+import com.leyou.bean.Category;
 import com.leyou.dto.CategoryDTO;
+import com.leyou.enums.ExceptionEnum;
+import com.leyou.exception.LyException;
 import com.leyou.service.CategoryService;
+import com.leyou.utils.JsonUtils;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,57 +46,66 @@ public class CategoryController {
             @RequestParam(value = "pid", defaultValue = "0") Long pid) {
 //        根据pid调用查询所有父节点
         List<CategoryDTO> list = categoryService.queryCategoryListByParentId(pid);
-
         return ResponseEntity.ok().body(list);
+    }
 
+    /**
+     * 遍历商品分类树 修改品牌中的分类需求
+     * @param id
+     * @return
+     */
+    @GetMapping("/list/of/brand")
+    public ResponseEntity<List<CategoryDTO>> queryCategoryById(
+            @RequestParam("id") long id) {
+//        根据品牌id调用查询所有父节点
+        List<CategoryDTO> list = categoryService.queryCategoryListById(id);
+        return ResponseEntity.ok().body(list);
     }
 
     /**
      * 添加商品分类
-     * @param isParent
-//     * @param name
-//     * @param parentId
-//     * @param sort
+     * @param
      */
     @PostMapping("/add")
-    public void addCategory(
-           @RequestBody() CategoryDTO isParent/*,
-            @RequestParam("name") String name,
-            @RequestParam("parentId") Integer parentId,
-            @RequestParam("sort") Integer sort*/) {
+    @ResponseBody
+    public ResponseEntity<Void> addCategory(@RequestBody JSONObject json) {
 
-        System.out.println(isParent);
-        /*System.out.println(name);
-        System.out.println(parentId);
-        System.out.println(sort);*/
+        categoryService.addCategoryByJson(json);
 
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     /**
      * 删除商品一个节点
-     * @param id
+     * @param json
      */
-    @RequestMapping("of/delete")
-    public void deleteCategoryById(
-            @RequestParam("id") String id) {
+    @PostMapping("of/delete")
+    @ResponseBody
+    public ResponseEntity<Void> deleteCategoryById(@RequestBody JSONObject json) {
+        categoryService.deleteCategoryByJson(json);
+        return ResponseEntity.ok().build();
 
-        System.out.println(id);
-        System.out.println(id);
     }
 
     /**
-     * 修改商品分类节点
-     * @param id
-     * @param name
+     * 修改商品分类节点名称
+     * @param category
      */
     @PostMapping("/edit")
-    public void editCategoryByIdAndName(
-            @RequestParam("id") String id,
-            @RequestParam("name") String name) {
+    public ResponseEntity<Void> updateCategoryByIdAndName(Category category) {
 
-        System.out.println(id);
-        System.out.println(name);
+        categoryService.updateCategoryByIdAndName(category);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
+    /**
+     * 修改商品品牌 先查询到分类返回
+     * @param id
+     */
+    @GetMapping("/of/brand")
+    public ResponseEntity<List<CategoryDTO>> editBrandById(@RequestParam("id") String id) {
+
+        return ResponseEntity.ok(categoryService.queryCategoryListById(Integer.parseInt(id)));
     }
 
 }

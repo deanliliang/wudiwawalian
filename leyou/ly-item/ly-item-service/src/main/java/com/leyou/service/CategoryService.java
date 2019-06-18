@@ -1,6 +1,9 @@
 package com.leyou.service;
 
+import com.leyou.bean.Category;
 import com.leyou.dto.CategoryDTO;
+import net.minidev.json.JSONObject;
+
 import java.util.List;
 
 /**
@@ -22,4 +25,30 @@ public interface CategoryService {
      */
     List<CategoryDTO> queryCategoryListByParentId(Long pid);
 
+    /**
+     * 查询分类
+     * @param id
+     * @return
+     */
+    List<CategoryDTO> queryCategoryListById(long id);
+
+    /**
+     * 添加分类
+     * @param json
+     * @return
+     */
+    void addCategoryByJson(JSONObject json);
+
+    /**
+     * 删除分类
+     * @param json
+     * @return
+     */
+    void deleteCategoryByJson(JSONObject json);
+
+    /**
+     * 修改分类名称
+     * @param category
+     */
+    void updateCategoryByIdAndName(Category category);
 }

@@ -1,0 +1,25 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: item-service
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/leyou
+    username: root
+    password: root
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+logging:
+  level:
+    com.leyou: debug
+mybatis:
+  type-aliases-package: com.leyou.bean
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: mappers/*.xml

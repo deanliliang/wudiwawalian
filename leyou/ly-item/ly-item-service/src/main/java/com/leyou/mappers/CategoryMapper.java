@@ -1,6 +1,9 @@
 package com.leyou.mappers;
 import com.leyou.bean.Category;
+import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
+
+import java.util.List;
 
 /**
  * @ProjectName: leyou
@@ -13,4 +16,18 @@ import tk.mybatis.mapper.common.Mapper;
  */
 
 public interface CategoryMapper extends Mapper<Category> {
+
+    /**
+     * 根据brand id查询所有分类 连接中间表
+     * @param id
+     * @return
+     */
+    List<Category> queryCategoryListById(@Param("id") long id);
+
+    /**
+     * 删除中间表
+     * @param cid
+     * @return
+     */
+    Integer deleteByCid(@Param("cid") long cid);
 }
