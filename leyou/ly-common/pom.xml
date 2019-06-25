@@ -13,6 +13,18 @@
 
     <dependencies>
         <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-extra</artifactId>
+        </dependency>
+        <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>

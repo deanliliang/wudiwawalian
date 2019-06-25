@@ -34,10 +34,10 @@
 <!--    </resultMap>-->
 
 
-    <select id="queryCategoryListById" resultType="Category">
-        SELECT tc.* FROM tb_category tc, tb_category_brand tcb
-        WHERE tc.id=tcb.category_id and tcb.brand_id = #{id}
-    </select>
+<!--    <select id="queryCategoryListById" resultType="Category">-->
+<!--        SELECT tc.* FROM tb_category tc, tb_category_brand tcb-->
+<!--        WHERE tc.id=tcb.category_id and tcb.brand_id = #{id}-->
+<!--    </select>-->
 
 
 <delete id="deleteByCid">

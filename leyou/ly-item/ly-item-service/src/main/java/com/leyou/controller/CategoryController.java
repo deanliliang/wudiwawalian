@@ -1,5 +1,6 @@
 package com.leyou.controller;
 
+import com.leyou.bean.BraCatMiddle;
 import com.leyou.bean.Category;
 import com.leyou.dto.CategoryDTO;
 import com.leyou.enums.ExceptionEnum;
@@ -103,9 +104,29 @@ public class CategoryController {
      * @param id
      */
     @GetMapping("/of/brand")
-    public ResponseEntity<List<CategoryDTO>> editBrandById(@RequestParam("id") String id) {
+    public ResponseEntity<List<CategoryDTO>> editBrandById(@RequestParam("id") Long id) {
 
-        return ResponseEntity.ok(categoryService.queryCategoryListById(Integer.parseInt(id)));
+        return ResponseEntity.ok(categoryService.queryCategoryListById(id));
+    }
+
+    /**
+     * 根据id的集合查询商品分类
+     * @param idList 商品分类的id集合
+     * @return 分类集合
+     */
+    @GetMapping("list")
+    public ResponseEntity<List<CategoryDTO>> queryByIds(@RequestParam("ids") List<Long> idList){
+        return ResponseEntity.ok(categoryService.queryCategoryByIds(idList));
+    }
+
+    /**
+     * 根据bid的获取品牌 分类表的集合
+     * @param bid
+     * @return 分类集合
+     */
+    @GetMapping("of/bid")
+    public ResponseEntity<List<CategoryDTO>> queryCategoryListByBid(@RequestParam("bid") Long bid){
+        return ResponseEntity.ok(categoryService.queryCategoryListById(bid));
     }
 
 }

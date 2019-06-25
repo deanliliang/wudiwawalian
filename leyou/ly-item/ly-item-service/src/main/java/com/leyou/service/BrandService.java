@@ -3,7 +3,6 @@ package com.leyou.service;
 import com.leyou.bean.Brandmsg;
 import com.leyou.bean.PageBean;
 import com.leyou.dto.BrandDTO;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public interface BrandService {
      * 根据信息删除
      * @param id
      */
-    void deleteBrandById(String id);
+    void deleteBrandById(Long id);
 
     /**
      * 根据信息查询
@@ -45,4 +44,8 @@ public interface BrandService {
     BrandDTO queryBrandById(Long id);
 
     void updateBrandByBrandmsg(Brandmsg brandmsg);
+
+    List<BrandDTO> queryBrandNameById(Long id);
+
+    List<BrandDTO> queryByIds(List<Long> idList);
 }

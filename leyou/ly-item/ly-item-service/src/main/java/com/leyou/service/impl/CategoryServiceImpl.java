@@ -52,16 +52,26 @@ public class CategoryServiceImpl implements CategoryService {
      * 根据品牌id查询
      *
      * @param id
-     * @return
+     * @return 分类集合
      */
     @Override
     public List<CategoryDTO> queryCategoryListById(long id) {
-//        根据brand id找中间表 在查找分类
-        List<Category> categorylist = categoryMapper.queryCategoryListById(id);
+////        根据brand id找中间表 在查找分类
+//        List<Category> categorylist = categoryMapper.queryCategoryListById(id);
+//
+//        //拷贝属性
+//        List<CategoryDTO> categoryDTOS = getCategoryDTOS(categorylist);
+//        return categoryDTOS;
 
-        //拷贝属性
-        List<CategoryDTO> categoryDTOS = getCategoryDTOS(categorylist);
-        return categoryDTOS;
+        // 根据父类目id查询子类目
+        List<Category> categoryList = categoryMapper.queryCategoryListByBrandId(id);
+
+        // 健壮性判断
+        if (CollectionUtils.isEmpty(categoryList)) {
+            throw new LyException(ExceptionEnum.CATEGORY_NOT_FOUND);
+        }
+        // 转换DTO并返回
+        return BeanHelper.copyWithCollection(categoryList, CategoryDTO.class);
     }
 
 
@@ -92,7 +102,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = new Category();
 //        属性加入到新建分类中
         Integer parentId = (Integer) data.get("parentId");
-        System.out.println(parentId);
+
         String id = parentId + "";
         category.setParentId(Long.parseLong(id));
         category.setName((String) data.get("name"));
@@ -161,4 +171,20 @@ public class CategoryServiceImpl implements CategoryService {
             throw new LyException(ExceptionEnum.UPDATE_OPERATION_FAIL);
         }
     }
+
+    /**
+     * @param ids
+     * @return 根据ids获取所有分类名
+     */
+    @Override
+    public List<CategoryDTO> queryCategoryByIds(List<Long> ids) {
+        List<Category> categories = categoryMapper.selectByIdList(ids);
+        // 判断是否为空
+        if (CollectionUtils.isEmpty(categories)) {
+            throw new LyException(ExceptionEnum.BRAND_NOT_FOUND);
+        }
+        return BeanHelper.copyWithCollection(categories, CategoryDTO.class);
+    }
+
+
 }

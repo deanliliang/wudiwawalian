@@ -22,12 +22,14 @@ zuul:
   prefix: /api #网关的前缀
   routes:
     item-service: /item/** #网关的路由映射
-
+    search-service: /search/** #search搜索服务映射
+    upload-service: /upload/**
 
 ly:
   cors:
     allowedOrigins:
      - http://manage.leyou.com
+     - http://www.leyou.com
     allowedCredentials: true
     allowedHeaders:
      - "*"

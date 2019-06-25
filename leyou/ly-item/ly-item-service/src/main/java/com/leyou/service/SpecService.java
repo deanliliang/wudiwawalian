@@ -14,8 +14,9 @@ import java.util.List;
  * @Date: 2019/6/19 0:26
  * @Version: 1.0
  */
-public interface SpecGroupService {
+public interface SpecService {
+
     List<SpecGroupDTO> querySpecGroupById(Long id);
 
-    List<SpecParamDTO> querySpecParamsById(Long gid);
+    List<SpecParamDTO> querySpecParamsById(Long gid, Long cid, Boolean searching);
 }

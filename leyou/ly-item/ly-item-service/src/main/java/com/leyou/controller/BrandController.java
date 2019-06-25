@@ -4,7 +4,6 @@ import com.leyou.bean.Brandmsg;
 import com.leyou.bean.PageBean;
 import com.leyou.dto.BrandDTO;
 import com.leyou.service.BrandService;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,15 +38,14 @@ public class BrandController {
     @PutMapping("save")
     public ResponseEntity<Void> saveBrandByIds(BrandDTO brandDTO, @RequestParam("cids") List<Long> ids) {
 
-        System.out.println(brandDTO);
-        System.out.println(ids);
         brandService.saveBrandByIds(brandDTO, ids);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     /**
      * 更新品牌和中间表(品牌 分类)
-     *
+     *todo
+     * 修改完成提示保存失败
      * @param brandDTO
      * @param ids
      * @return
@@ -55,10 +53,8 @@ public class BrandController {
     @PostMapping("save")
     public ResponseEntity<Void> updateBrandByIds(BrandDTO brandDTO, @RequestParam("cids") List<Long> ids) {
 
-        System.out.println(brandDTO);
-        System.out.println(ids);
         brandService.saveBrandByIds(brandDTO, ids);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -92,7 +88,7 @@ public class BrandController {
      * @return
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteBrandById(@PathVariable("id") String id) {
+    public ResponseEntity<Void> deleteBrandAndMidById(@PathVariable("id") Long id) {
 
 //        删除中间表
         brandService.deleteBrandById(id);
@@ -105,11 +101,35 @@ public class BrandController {
      * @param id
      * @return BrandDTO
      */
-    @PostMapping("/of/brand")
-    public ResponseEntity<BrandDTO> deleteBrandById(Long id) {
+    @GetMapping("/of/brand")
+    public ResponseEntity<BrandDTO> queryBrandById(Long id) {
         BrandDTO b = brandService.queryBrandById(id);
 //        返回查询到的BrandDTO
         return ResponseEntity.status(HttpStatus.OK).body(b);
+    }
+
+    /**
+     * 查询品牌
+     *
+     * @param id
+     * @return BrandDTO
+     */
+    @GetMapping("/of/category")
+    public ResponseEntity<List<BrandDTO>> queryCategoryById(@RequestParam("id") Long id) {
+
+
+//        返回查询到的BrandDTO集合
+        return ResponseEntity.ok(brandService.queryBrandNameById(id));
+    }
+
+    /**
+     * 根据id的集合查询品牌
+     * @param idList 品牌id的集合
+     * @return 品牌的集合
+     */
+    @GetMapping("/list")
+    public ResponseEntity<List<BrandDTO>> queryBrandByIds(@RequestParam("ids") List<Long> idList){
+        return ResponseEntity.ok(brandService.queryByIds(idList));
     }
 
 

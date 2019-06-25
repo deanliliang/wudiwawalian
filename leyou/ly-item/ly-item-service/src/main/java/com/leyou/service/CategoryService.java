@@ -4,6 +4,7 @@ import com.leyou.bean.Category;
 import com.leyou.dto.CategoryDTO;
 import net.minidev.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -51,4 +52,13 @@ public interface CategoryService {
      * @param category
      */
     void updateCategoryByIdAndName(Category category);
+
+    /**
+     * 根据分类查询所有分类名
+     * @param ids
+     * @return
+     */
+    List<CategoryDTO> queryCategoryByIds(List<Long> ids);
+
+
 }

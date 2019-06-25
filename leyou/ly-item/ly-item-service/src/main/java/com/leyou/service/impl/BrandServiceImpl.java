@@ -70,7 +70,9 @@ public class BrandServiceImpl implements BrandService {
         }
 
 
+
         List<Brand> listBrands = brandMapper.selectByExample(example);
+
 //        判断集合是否为空
         if (CollectionUtils.isEmpty(listBrands)) {
             throw new LyException(ExceptionEnum.BRAND_NOT_FOUND);
@@ -99,7 +101,7 @@ public class BrandServiceImpl implements BrandService {
 //            转化为brand
             Brand brand = BeanHelper.copyProperties(brandDTO, Brand.class);
             int i = brandMapper.updateByPrimaryKeySelective(brand);
-            System.out.println(i + "--");
+
 //            根据bid删除原中间表
             Integer deleteCount = brandMapper.deleteByBid(dtoId);
             if (deleteCount == 0) {
@@ -135,17 +137,16 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteBrandById(String id) {
+    public void deleteBrandById(Long id) {
         Brand brand = new Brand();
-        long bid = Long.parseLong(id);
-        brand.setId(bid);
+        brand.setId(id);
 //        删除品牌
         int i = brandMapper.delete(brand);
         if (i == 0) {
             throw new LyException(ExceptionEnum.DELETE_OPERATION_FAIL);
         }
         //删除分类和品牌中间表
-        Integer bid1 = brandMapper.deleteByBid(bid);
+        Integer bid1 = brandMapper.deleteByBid(id);
         if (bid1 == 0) {
             throw new LyException(ExceptionEnum.DELETE_OPERATION_FAIL);
         }
@@ -169,6 +170,9 @@ public class BrandServiceImpl implements BrandService {
         Brand brand1 = brands.get(0);
 //        属性复制
         BrandDTO brandDTO = BeanHelper.copyProperties(brand1, BrandDTO.class);
+        if (brandDTO==null) {
+            throw new LyException(ExceptionEnum.BRAND_NOT_FOUND);
+        }
         return brandDTO;
     }
 
@@ -183,5 +187,37 @@ public class BrandServiceImpl implements BrandService {
         if (insert != 1) {
             throw new LyException(ExceptionEnum.UPDATE_OPERATION_FAIL);
         }
+    }
+
+    /**
+     * 根据分类对象里面的id查询品牌名集合
+     * @param id
+     * @return BrandDTO集合
+     */
+    @Override
+    public List<BrandDTO> queryBrandNameById(Long id) {
+        List<Brand> brands = brandMapper.queryBrandNameById(id);
+//        判断集合是否为空
+
+        if (CollectionUtils.isEmpty(brands)) {
+            throw new LyException(ExceptionEnum.BRAND_NOT_FOUND);
+        }
+
+        return BeanHelper.copyWithCollection(brands,BrandDTO.class);
+    }
+
+    /**
+     * 根据ids查询返回品牌集合
+     * @param idList
+     * @return
+     */
+    @Override
+    public List<BrandDTO> queryByIds(List<Long> idList) {
+        List<Brand> brandList = brandMapper.selectByIdList(idList);
+//        集合为空或者添加数量和ids集合数量不等则有异常
+        if (CollectionUtils.isEmpty(brandList)||idList.size()!=brandList.size()){
+            throw new LyException(ExceptionEnum.BRAND_NOT_FOUND);
+        }
+        return BeanHelper.copyWithCollection(brandList, BrandDTO.class);
     }
 }
