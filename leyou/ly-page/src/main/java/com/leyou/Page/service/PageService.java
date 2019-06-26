@@ -25,4 +25,6 @@ public interface PageService {
      * @param id
      */
     void createHtmlItem(Long id);
+
+    void deleteHtmlItem(Long id);
 }

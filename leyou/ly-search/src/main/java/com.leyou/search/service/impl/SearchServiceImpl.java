@@ -9,6 +9,7 @@ import com.leyou.item.client.ItemClient;
 import com.leyou.search.bean.Goods;
 import com.leyou.search.dto.GoodsDTO;
 import com.leyou.search.dto.SearchRequest;
+import com.leyou.search.repository.GoodsRepository;
 import com.leyou.search.service.SearchService;
 import com.leyou.utils.BeanHelper;
 import com.leyou.utils.JsonUtils;
@@ -50,6 +51,8 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private ElasticsearchTemplate esTemplate;
 
+    @Autowired
+    private GoodsRepository goodsRepository;
     /**
      * 搜索查询
      * @param request
@@ -339,5 +342,32 @@ public class SearchServiceImpl implements SearchService {
         } catch (Exception e) {
             return 0;
         }
+    }
+
+
+
+
+    /**
+     * 添加商品索引
+     * @param id
+     */
+    @Override
+    public void createIndex(Long id) {
+//        查询到spu
+        SpuDTO spuDTO = itemClient.queryGoodsById(id);
+//        构建成Goods对象
+        Goods goods = buildGoods(spuDTO);
+//        保存到数据库
+        goodsRepository.save(goods);
+    }
+
+    /**
+     * 删除商品索引
+     * @param id
+     */
+    @Override
+    public void deleteIndex(Long id) {
+        goodsRepository.deleteById(id);
+
     }
 }

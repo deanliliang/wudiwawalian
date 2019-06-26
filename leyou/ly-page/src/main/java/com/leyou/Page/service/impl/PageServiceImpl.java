@@ -110,4 +110,19 @@ public class PageServiceImpl implements PageService {
         map.put("specs",SpecGroupList);
         return map;
     }
+
+    /**
+     * 删除本地静态html
+     * @param id
+     */
+    @Override
+    public void deleteHtmlItem(Long id) {
+        File file = new File(itemDir, id + ".html");
+        if (file.exists()){
+               if (!file.delete()){
+                   log.error("【静态页服务】静态页删除失败，商品id：{}", id);
+                   throw new LyException(ExceptionEnum.FILE_WRITER_ERROR);
+               }
+        }
+    }
 }

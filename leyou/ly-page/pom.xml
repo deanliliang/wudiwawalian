@@ -11,6 +11,10 @@
     <artifactId>ly-page</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
         <!--eureka-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

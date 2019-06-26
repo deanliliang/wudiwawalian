@@ -27,4 +27,8 @@ public interface SearchService {
 
 
     Map<String, List<?>> queryFilters(SearchRequest request);
+
+    void createIndex(Long id);
+
+    void deleteIndex(Long id);
 }

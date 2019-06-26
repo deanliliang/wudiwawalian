@@ -3,6 +3,7 @@ package com.leyou.service.impl;
 import com.leyou.bean.Sku;
 import com.leyou.bean.Spu;
 import com.leyou.bean.SpuDetail;
+import com.leyou.constants.MQConstants;
 import com.leyou.dto.SkuDTO;
 import com.leyou.dto.SpuDTO;
 import com.leyou.dto.SpuDetailDTO;
@@ -13,10 +14,16 @@ import com.leyou.mappers.SpuDetailMapper;
 import com.leyou.mappers.SpuGoodsMapper;
 import com.leyou.service.GoodsService;
 import com.leyou.utils.BeanHelper;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import tk.mybatis.mapper.entity.Example;
+import static com.leyou.constants.MQConstants.*;
+import static com.leyou.constants.MQConstants.Exchange.*;
+import static com.leyou.constants.MQConstants.RoutingKey.*;
+
 
 import java.util.List;
 
@@ -38,6 +45,9 @@ public class GoodsServiceImpl implements GoodsService {
     private SpuDetailMapper spuDetailMapper;
     @Autowired
     private SkuMapper skuMapper;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     /**
      * 添加商品
@@ -184,6 +194,20 @@ public class GoodsServiceImpl implements GoodsService {
         if (i == 0) {
             throw new LyException(ExceptionEnum.UPDATE_OPERATION_FAIL);
         }
+
+        // 顺便把sku中的enable也修改了
+        Example example = new Example(Sku.class);
+        example.createCriteria().andEqualTo("spuId", id);
+        Sku sku = new Sku();
+        sku.setEnable(saleable);
+        skuMapper.updateByExampleSelective(sku, example);
+
+
+        String key = saleable ?ITEM_UP_KEY:ITEM_DOWN_KEY;
+//        发送上下架消息到交换机
+        amqpTemplate.convertAndSend(ITEM_EXCHANGE_NAME, key, id);
+
+
     }
 
     /**
