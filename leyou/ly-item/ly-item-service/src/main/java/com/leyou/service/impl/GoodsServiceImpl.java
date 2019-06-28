@@ -3,7 +3,6 @@ package com.leyou.service.impl;
 import com.leyou.bean.Sku;
 import com.leyou.bean.Spu;
 import com.leyou.bean.SpuDetail;
-import com.leyou.constants.MQConstants;
 import com.leyou.dto.SkuDTO;
 import com.leyou.dto.SpuDTO;
 import com.leyou.dto.SpuDetailDTO;
@@ -20,12 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
-import static com.leyou.constants.MQConstants.*;
-import static com.leyou.constants.MQConstants.Exchange.*;
-import static com.leyou.constants.MQConstants.RoutingKey.*;
-
 
 import java.util.List;
+
+import static com.leyou.constants.MQConstants.Exchange.ITEM_EXCHANGE_NAME;
+import static com.leyou.constants.MQConstants.RoutingKey.ITEM_DOWN_KEY;
+import static com.leyou.constants.MQConstants.RoutingKey.ITEM_UP_KEY;
 
 /**
  * @ProjectName: leyou
@@ -46,6 +45,9 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private SkuMapper skuMapper;
 
+    /**
+     * 消息队列发送
+     */
     @Autowired
     private AmqpTemplate amqpTemplate;
 
@@ -69,7 +71,7 @@ public class GoodsServiceImpl implements GoodsService {
             throw new LyException(ExceptionEnum.INSERT_OPERATION_FAIL);
         }
 
-//        获取传入spu你们的detail
+//        获取传入spu里面的detail
         SpuDetailDTO spuDtoDetail = spuDTO.getSpuDetail();
 //        属性拷贝到SpuDetail
         SpuDetail spuDetail = BeanHelper.copyProperties(spuDtoDetail, SpuDetail.class);
@@ -97,10 +99,10 @@ public class GoodsServiceImpl implements GoodsService {
 
     }
 
-
     /**
      * 商品修改先查询商品详情
      * 根据商品 spuid
+     *
      * @param id
      * @return
      */
@@ -121,51 +123,14 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * 商品修改先查询商品spu
      * 根据商品 spuid
+     *
      * @param id
      * @return
      */
     @Override
     public List<SkuDTO> querySkuListById(Long id) {
-//        Spu spu = new Spu();
-//        Sku sku = new Sku();
-//        SpuDetail spuDetail = new SpuDetail();
-//        //        id为空不传值
-//        if (id != null) {
-//            spu.setId(id);
-//            sku.setSpuId(id);
-//            spuDetail.setSpuId(id);
-//        }
-////      1.根据id查询spu
-//        Spu spu1 = spuGoodsMapper.selectByPrimaryKey(spu);
-//        if (spu1 == null) {
-//            throw new LyException(ExceptionEnum.GOODS_NOT_FOUND);
-//        }
-////        转化为DTO对象
-//        SpuDTO spuDTOReturn = BeanHelper.copyProperties(spu1, SpuDTO.class);
-//
-////      2.  通过spuid获取sku集合
-//        List<Sku> skuList = skuMapper.select(sku);
-//        if (CollectionUtils.isEmpty(skuList)){
-//            throw  new LyException(ExceptionEnum.GOODS_NOT_FOUND);
-//        }
-////        转化为DTO对象
-//        List<SkuDTO> skuDTOS = BeanHelper.copyWithCollection(skuList, SkuDTO.class);
-////        添加到spuDTOReturn中
-//        spuDTOReturn.setSkus(skuDTOS);
-//
-////       3. 通过spuid获取spuDetail
-//        SpuDetail spuDetail1 = spuDetailMapper.selectByPrimaryKey(spuDetail);
-//        if (spuDetail1==null){
-//            throw  new LyException(ExceptionEnum.GOODS_NOT_FOUND);
-//        }
-////        转化为DTO对象
-//        SpuDetailDTO spuDetailDTO = BeanHelper.copyProperties(spuDetail1, SpuDetailDTO.class);
-////        添加到spuDTOReturn中
-//        spuDTOReturn.setSpuDetail(spuDetailDTO);
-
-
         Sku sku = new Sku();
-        if (id!=null){
+        if (id != null) {
             sku.setSpuId(id);
         }
 //        通用mapper查询list数据
@@ -203,7 +168,7 @@ public class GoodsServiceImpl implements GoodsService {
         skuMapper.updateByExampleSelective(sku, example);
 
 
-        String key = saleable ?ITEM_UP_KEY:ITEM_DOWN_KEY;
+        String key = saleable ? ITEM_UP_KEY : ITEM_DOWN_KEY;
 //        发送上下架消息到交换机
         amqpTemplate.convertAndSend(ITEM_EXCHANGE_NAME, key, id);
 
@@ -251,20 +216,78 @@ public class GoodsServiceImpl implements GoodsService {
 
 
     /**
+     * 更新商品
+     * Todo
+     *
+     * @param spuDTO
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateGoods(SpuDTO spuDTO) {
+
+        int count = 0;
+//        更新spu表
+//        1.0转化为spu
+        Spu spu = BeanHelper.copyProperties(spuDTO, Spu.class);
+//        1.1设置某些值为null 安全性
+        spu.setSaleable(null);
+        spu.setUpdateTime(null);
+        spu.setCreateTime(null);
+//        根据id主键更新
+        count = spuGoodsMapper.updateByPrimaryKeySelective(spu);
+//        count不等于1 则更新失败
+        if (count != 1) {
+            throw new LyException(ExceptionEnum.UPDATE_OPERATION_FAIL);
+        }
+
+//        更新spudetail表
+//        2.1获取spudeatil对象
+        SpuDetail spuDetail = BeanHelper.copyProperties(spuDTO.getSpuDetail(), SpuDetail.class);
+        spuDetail.setCreateTime(null);
+        spuDetail.setUpdateTime(null);
+        int i = spuDetailMapper.updateByPrimaryKeySelective(spuDetail);
+        //        count不等于1 则更新失败
+        if (i != 1) {
+            throw new LyException(ExceptionEnum.UPDATE_OPERATION_FAIL);
+        }
+
+//        更新sku表
+//        3.1 先根据spuid删除以前的sku表集合
+        Sku sku = new Sku();
+        sku.setSpuId(spuDTO.getId());
+//        查询出数据库有几条当前id数据
+        List<Sku> list = skuMapper.select(sku);
+//        删除当前sku集合
+        int delete = skuMapper.delete(sku);
+//        集合长度和删除个数不相等时报异常
+        if (delete != list.size()) {
+            throw new LyException(ExceptionEnum.UPDATE_OPERATION_FAIL);
+        }
+//        取出sku集合进行保存
+        List<Sku> skuList = BeanHelper.copyWithCollection(spuDTO.getSkus(), Sku.class);
+//        在本类添加方法添加sku集合
+        int x = insertSkuList(skuList, spuDTO.getId());
+        if (skuList.size() != x) {
+            throw new LyException(ExceptionEnum.UPDATE_OPERATION_FAIL);
+        }
+    }
+
+    /**
      * 获取商品信息
+     *
      * @param id
      * @return
      */
     @Override
     public SpuDTO queryGoodsById(Long id) {
 //        判断id的有效性
-        if (id==null||id<=0){
-            throw  new LyException(ExceptionEnum.INVALID_PARAM_ERROR);
+        if (id == null || id <= 0) {
+            throw new LyException(ExceptionEnum.INVALID_PARAM_ERROR);
         }
 //        根据通用mapper主键查询
         Spu spu = spuGoodsMapper.selectByPrimaryKey(id);
-        if (null==spu){
-            throw  new LyException(ExceptionEnum.GOODS_NOT_FOUND);
+        if (null == spu) {
+            throw new LyException(ExceptionEnum.GOODS_NOT_FOUND);
         }
         SpuDTO spuDTO = BeanHelper.copyProperties(spu, SpuDTO.class);
 //        加入spuDTO相关信息
@@ -275,13 +298,20 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     /**
-     * 更新商品
-     * Todo
-     * @param spuDTO
+     * 添加sku集合到数据库
+     *
+     * @param skuList
+     * @param id
+     * @return
      */
-    @Override
-    public void updateGoods(SpuDTO spuDTO) {
-        int x = 1/0;
+    public Integer insertSkuList(List<Sku> skuList, Long id) {
+        for (Sku sku : skuList) {
+//            设置id和 时候启用
+            sku.setSpuId(id);
+            sku.setEnable(false);
+        }
+
+        return skuMapper.insertSkuList(skuList);
     }
 
 }

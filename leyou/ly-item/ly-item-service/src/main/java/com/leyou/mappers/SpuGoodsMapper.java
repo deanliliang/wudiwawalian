@@ -1,6 +1,7 @@
 package com.leyou.mappers;
 
 import com.leyou.bean.Spu;
+import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
@@ -13,4 +14,6 @@ import tk.mybatis.mapper.common.Mapper;
  * @Version: 1.0
  */
 public interface SpuGoodsMapper extends Mapper<Spu> {
+    @Select("SELECT count(*) FROM tb_spu")
+    int selectCounts();
 }

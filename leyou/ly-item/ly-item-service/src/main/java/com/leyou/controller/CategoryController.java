@@ -1,20 +1,14 @@
 package com.leyou.controller;
 
-import com.leyou.bean.BraCatMiddle;
 import com.leyou.bean.Category;
 import com.leyou.dto.CategoryDTO;
-import com.leyou.enums.ExceptionEnum;
-import com.leyou.exception.LyException;
 import com.leyou.service.CategoryService;
-import com.leyou.utils.JsonUtils;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -72,7 +66,6 @@ public class CategoryController {
     public ResponseEntity<Void> addCategory(@RequestBody JSONObject json) {
 
         categoryService.addCategoryByJson(json);
-
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

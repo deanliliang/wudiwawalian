@@ -23,7 +23,8 @@ zuul:
   routes:
     item-service: /item/** #网关的路由映射
     search-service: /search/** #search搜索服务映射
-    upload-service: /upload/**
+    upload-service: /upload/** #上传搜索服务映射
+    user-service: /user/** #user服务映射
 
 ly:
   cors:

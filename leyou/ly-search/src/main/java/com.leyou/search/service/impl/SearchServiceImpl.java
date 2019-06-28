@@ -29,7 +29,6 @@ import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -343,9 +342,6 @@ public class SearchServiceImpl implements SearchService {
             return 0;
         }
     }
-
-
-
 
     /**
      * 添加商品索引

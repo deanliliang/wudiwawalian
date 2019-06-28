@@ -1,0 +1,60 @@
+{
+  "groups": [
+    {
+      "name": "ly.sms",
+      "type": "com.leyou.sms.config.SmsProperties",
+      "sourceType": "com.leyou.sms.config.SmsProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "ly.sms.access-key-i-d",
+      "type": "java.lang.String",
+      "description": "账号",
+      "sourceType": "com.leyou.sms.config.SmsProperties"
+    },
+    {
+      "name": "ly.sms.access-key-secret",
+      "type": "java.lang.String",
+      "description": "密钥",
+      "sourceType": "com.leyou.sms.config.SmsProperties"
+    },
+    {
+      "name": "ly.sms.action",
+      "type": "java.lang.String",
+      "description": "API类型",
+      "sourceType": "com.leyou.sms.config.SmsProperties"
+    },
+    {
+      "name": "ly.sms.domain",
+      "type": "java.lang.String",
+      "description": "发送短信请求的域名",
+      "sourceType": "com.leyou.sms.config.SmsProperties"
+    },
+    {
+      "name": "ly.sms.region-i-d",
+      "type": "java.lang.String",
+      "description": "区域",
+      "sourceType": "com.leyou.sms.config.SmsProperties"
+    },
+    {
+      "name": "ly.sms.sign-name",
+      "type": "java.lang.String",
+      "description": "短信签名",
+      "sourceType": "com.leyou.sms.config.SmsProperties"
+    },
+    {
+      "name": "ly.sms.verify-code-template",
+      "type": "java.lang.String",
+      "description": "短信模板",
+      "sourceType": "com.leyou.sms.config.SmsProperties"
+    },
+    {
+      "name": "ly.sms.version",
+      "type": "java.lang.String",
+      "description": "API版本",
+      "sourceType": "com.leyou.sms.config.SmsProperties"
+    }
+  ],
+  "hints": []
+}

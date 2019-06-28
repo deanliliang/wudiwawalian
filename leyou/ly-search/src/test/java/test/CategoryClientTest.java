@@ -55,8 +55,16 @@ public class CategoryClientTest {
 //        BrandDTO brandDTO = itemClient.queryBrandById(1115L);
 //        System.out.println("brandDTO = " + brandDTO);
 
-        List<SpecGroupDTO> specGroupDTOS = itemClient.querySpecGroupList(76L);
-        System.out.println("specGroupDTOS = " + specGroupDTOS);
+//        List<SpecGroupDTO> specGroupDTOS = itemClient.querySpecGroupList(76L);
+//        System.out.println("specGroupDTOS = " + specGroupDTOS);
+
+        String x = "12";
+        Integer y = 13;
+        Integer integer = Integer.valueOf(x);
+        System.out.println("integer = " + integer);
+        String s = String.valueOf(y);
+        System.out.println("s = " + s);
+
 
     }
 
@@ -74,7 +82,7 @@ public class CategoryClientTest {
             skuMap.add(map);
         }
 
-        System.out.println(skuMap);
+//        System.out.println(skuMap);
     }
 
     /**

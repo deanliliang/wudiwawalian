@@ -20,6 +20,8 @@ spring:
         max-interval: 80000ms
         multiplier: 2
     publisher-confirms: true
+  redis:
+    host: 192.168.88.134
 eureka:
   client:
     service-url:

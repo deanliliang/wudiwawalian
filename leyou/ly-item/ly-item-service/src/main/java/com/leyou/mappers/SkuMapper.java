@@ -2,6 +2,9 @@ package com.leyou.mappers;
 
 import com.leyou.bean.Sku;
 import com.leyou.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @ProjectName: leyou
@@ -13,4 +16,7 @@ import com.leyou.mapper.BaseMapper;
  * @Version: 1.0
  */
 public interface SkuMapper extends BaseMapper<Sku> {
+
+
+    Integer insertSkuList(@Param("skuList") List<Sku> skuList);
 }

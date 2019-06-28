@@ -34,9 +34,7 @@ public class UploadController {
     @PostMapping("image")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
         // 返回200，并且携带url路径
-        System.out.println(1);
-        System.out.println(1);
-        System.out.println(1);
+
         return ResponseEntity.ok(this.uploadService.upload(file));
     }
 

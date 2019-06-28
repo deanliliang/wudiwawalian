@@ -1,7 +1,7 @@
 package com.leyou.mappers;
 
 import com.leyou.bean.SpecGroup;
-import tk.mybatis.mapper.common.Mapper;
+import tk.mybatis.mapper.common.BaseMapper;
 
 /**
  * @ProjectName: leyou
@@ -12,5 +12,5 @@ import tk.mybatis.mapper.common.Mapper;
  * @Date: 2019/6/19 1:29
  * @Version: 1.0
  */
-public interface SpecGroupMapper extends Mapper<SpecGroup> {
+public interface SpecGroupMapper extends BaseMapper<SpecGroup> {
 }

@@ -44,7 +44,6 @@ public class GoodsController {
      */
     @PutMapping("goods")
     public ResponseEntity<Void> updateGoods(@RequestBody SpuDTO spuDTO) {
-        System.out.println(spuDTO);
         goodsService.updateGoods(spuDTO);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

@@ -55,14 +55,23 @@ public class SpuGoodsServiceImpl implements SpuGoodsService {
      */
     @Override
     public PageBean<SpuDTO> listSpuGoods(String key, Boolean saleable, Integer page, Integer rows) {
-        PageHelper.startPage(page, rows);
+//        判断是否要显示全部 rows为-1 时显示全部
+        if (rows==-1){
+//            查询出数据库全部条数
+            int i = spuGoodsMapper.selectCounts();
+            PageHelper.startPage(page, i);
+        }else {
+            PageHelper.startPage(page, rows);
+        }
 //        建立条件查询
         Example example = new Example(Spu.class);
         Example.Criteria criteria = example.createCriteria();
 //        过滤条件
         if (StringUtils.isNotBlank(key)) {
             criteria.andLike("name","%"+key+"%");
+            criteria.orLike("id","%"+key+"%");
         }
+
         if (saleable!=null) {
             criteria.andEqualTo("saleable",saleable);
         }

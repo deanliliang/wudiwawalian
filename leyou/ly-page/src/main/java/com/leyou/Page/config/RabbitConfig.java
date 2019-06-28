@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @ProjectName: leyou
- * @Package: com.leyou.config
+ * @Package: com.leyou.user.config
  * @ClassName: RabbitConfig
  * @Author: Dean
  * @Description: 自定义消息转换器
