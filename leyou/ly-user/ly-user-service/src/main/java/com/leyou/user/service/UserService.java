@@ -1,6 +1,7 @@
 package com.leyou.user.service;
 
 import com.leyou.user.bean.User;
+import com.leyou.user.pojo.dto.UserDTO;
 
 /**
  * @ProjectName: leyou
@@ -33,9 +34,7 @@ public interface UserService {
      */
     void saveUser(User user, String code);
 
-    /**
-     * 用户登陆
-     * @param user
-     */
-    void login(User user);
+
+
+    UserDTO queryUser(String username, String password);
 }

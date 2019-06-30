@@ -25,6 +25,7 @@ zuul:
     search-service: /search/** #search搜索服务映射
     upload-service: /upload/** #上传搜索服务映射
     user-service: /user/** #user服务映射
+    auth-service: /auth/**
 
 ly:
   cors:

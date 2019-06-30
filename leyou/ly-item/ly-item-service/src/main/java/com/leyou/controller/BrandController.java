@@ -44,8 +44,7 @@ public class BrandController {
 
     /**
      * 更新品牌和中间表(品牌 分类)
-     *todo
-     * 修改完成提示保存失败
+     *
      * @param brandDTO
      * @param ids
      * @return

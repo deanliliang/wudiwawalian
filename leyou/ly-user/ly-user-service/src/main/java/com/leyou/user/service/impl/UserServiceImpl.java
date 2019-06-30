@@ -3,8 +3,10 @@ package com.leyou.user.service.impl;
 import com.leyou.enums.ExceptionEnum;
 import com.leyou.exception.LyException;
 import com.leyou.user.bean.User;
+import com.leyou.user.pojo.dto.UserDTO;
 import com.leyou.user.mapper.UserMapper;
 import com.leyou.user.service.UserService;
+import com.leyou.utils.BeanHelper;
 import com.leyou.utils.RegexUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -97,25 +99,26 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 保存用户
+     *
      * @param user
      * @param code
      */
     @Override
     public void saveUser(User user, String code) {
 //        判断验证码是否为空
-        if(StringUtils.isBlank(code)){
+        if (StringUtils.isBlank(code)) {
             throw new LyException(ExceptionEnum.INVALID_VERIFY_CODE);
         }
-        if(StringUtils.isBlank(user.getPhone())){
+        if (StringUtils.isBlank(user.getPhone())) {
             throw new LyException(ExceptionEnum.INVALID_PHONE_NUMBER);
         }
-        if(StringUtils.isBlank(user.getUsername())){
+        if (StringUtils.isBlank(user.getUsername())) {
             throw new LyException(ExceptionEnum.INVALID_USERNAME_PASSWORD);
         }
 
 //        取出redis中的验证码 然后验证验证码时候一致
         String checkCode = redisTemplate.opsForValue().get(KEY_PREFIX + user.getPhone());
-        if (!code.equalsIgnoreCase(checkCode)){
+        if (!code.equalsIgnoreCase(checkCode)) {
             throw new LyException(ExceptionEnum.INVALID_VERIFY_CODE);
         }
 
@@ -124,17 +127,34 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodePassword);
 //        保存用户
         int insert = userMapper.insert(user);
-        if (insert==0){
-            throw  new LyException(ExceptionEnum.INSERT_OPERATION_FAIL);
+        if (insert == 0) {
+            throw new LyException(ExceptionEnum.INSERT_OPERATION_FAIL);
         }
     }
 
     /**
-     * 用户登陆
-     * @param user
+     * 查询用户
+     * @param username
+     * @param password
+     * @return
      */
-    @Override
-    public void login(User user) {
 
+    @Override
+    public UserDTO queryUser(String username, String password) {
+        User user1 = new User();
+//        先按照用户名先查询 查询到再去匹配密码
+        user1.setUsername(username);
+        User selectOne = userMapper.selectOne(user1);
+        if (selectOne == null) {
+            throw new LyException(ExceptionEnum.INVALID_USERNAME_PASSWORD);
+        }
+
+//        根据匹配密码查询
+//        根据用户名找出数据库对应密码拿出来比较
+        boolean matches = passwordEncoder.matches(password, selectOne.getPassword());
+        if (!matches) {
+            throw new LyException(ExceptionEnum.INVALID_USERNAME_PASSWORD);
+        }
+        return BeanHelper.copyProperties(selectOne, UserDTO.class);
     }
 }

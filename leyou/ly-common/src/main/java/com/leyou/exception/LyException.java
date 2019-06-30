@@ -1,8 +1,6 @@
 package com.leyou.exception;
 
 import com.leyou.enums.ExceptionEnum;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 /**
@@ -25,5 +23,16 @@ public class LyException extends RuntimeException {
         super(em.getMessage(), cause);
         this.status = em.getStatus();
     }
+
+    public LyException(int status, String message) {
+        super(message);
+        this.status = status;
+    }
+
+    public LyException(int status, String message, Throwable cause) {
+        super(message, cause);
+        this.status = status;
+    }
+
 
 }

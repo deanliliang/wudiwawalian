@@ -7,9 +7,6 @@ import org.springframework.stereotype.Component;
 /**
  * 阿里云上传OSS
  */
-
-//todo
-//springboot 配置路径报错 ly.oss
 @Data
 @Component
 @ConfigurationProperties("ly.oss")

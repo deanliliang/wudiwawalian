@@ -110,6 +110,4 @@ public class GoodsController {
         return ResponseEntity.ok().body(goodsService.queryGoodsById(id));
     }
 
-
-
 }

@@ -19,9 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
-
 import java.util.List;
-
 import static com.leyou.constants.MQConstants.Exchange.ITEM_EXCHANGE_NAME;
 import static com.leyou.constants.MQConstants.RoutingKey.ITEM_DOWN_KEY;
 import static com.leyou.constants.MQConstants.RoutingKey.ITEM_UP_KEY;
@@ -167,11 +165,9 @@ public class GoodsServiceImpl implements GoodsService {
         sku.setEnable(saleable);
         skuMapper.updateByExampleSelective(sku, example);
 
-
         String key = saleable ? ITEM_UP_KEY : ITEM_DOWN_KEY;
 //        发送上下架消息到交换机
         amqpTemplate.convertAndSend(ITEM_EXCHANGE_NAME, key, id);
-
 
     }
 
@@ -216,8 +212,6 @@ public class GoodsServiceImpl implements GoodsService {
 
 
     /**
-     * 更新商品
-     * Todo
      *
      * @param spuDTO
      */
