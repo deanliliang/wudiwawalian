@@ -1,12 +1,12 @@
 package com.leyou.auth.controller;
 
+import com.leyou.auth.bean.UserInfo;
 import com.leyou.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -29,7 +29,31 @@ public class AuthController {
                                       @RequestParam("password")String password,
                                       HttpServletResponse response){
 
+        System.out.println(1);
         authService.login(username,password,response);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 判断用户登录状态
+     * @param request
+     * @param response
+     * @return
+     */
+    @GetMapping("/verify")
+    public ResponseEntity<UserInfo> getVerify(HttpServletRequest request, HttpServletResponse response){
+        return ResponseEntity.ok(authService.getVerify(request,response));
+    }
+
+    /**
+     * 用户退出
+     * @param request
+     * @param response
+     * @return
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response){
+        authService.logout(request,response);
         return ResponseEntity.ok().build();
     }
 }

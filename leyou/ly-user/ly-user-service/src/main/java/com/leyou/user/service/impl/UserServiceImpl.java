@@ -3,8 +3,8 @@ package com.leyou.user.service.impl;
 import com.leyou.enums.ExceptionEnum;
 import com.leyou.exception.LyException;
 import com.leyou.user.bean.User;
-import com.leyou.user.pojo.dto.UserDTO;
 import com.leyou.user.mapper.UserMapper;
+import com.leyou.user.pojo.dto.UserDTO;
 import com.leyou.user.service.UserService;
 import com.leyou.utils.BeanHelper;
 import com.leyou.utils.RegexUtils;
@@ -16,7 +16,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -138,7 +137,6 @@ public class UserServiceImpl implements UserService {
      * @param password
      * @return
      */
-
     @Override
     public UserDTO queryUser(String username, String password) {
         User user1 = new User();

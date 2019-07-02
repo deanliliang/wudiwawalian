@@ -28,6 +28,7 @@ public class GoodsController {
 
     /**
      * 新增商品
+     *
      * @param spuDTO
      * @return
      */
@@ -39,6 +40,7 @@ public class GoodsController {
 
     /**
      * 更新商品
+     *
      * @param spuDTO
      * @return
      */
