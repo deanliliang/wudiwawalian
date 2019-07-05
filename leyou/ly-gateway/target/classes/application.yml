@@ -26,6 +26,14 @@ zuul:
     upload-service: /upload/** #上传搜索服务映射
     user-service: /user/** #user服务映射
     auth-service: /auth/**
+    order-service:
+      path: /order/**
+      serviceId: order-service
+      strip-prefix: false
+    cart-service:
+      path: /cart/**
+      serviceId: cart-service
+      strip-prefix: false
   sensitive-headers:  #覆盖敏感头信息 不拦截用户token
 
 ly:
@@ -49,10 +57,15 @@ ly:
     pubKeyPath: F:/GitHub/authUser/develop/ssh/id_rsa.pub # 公钥地址
     user:
       cookieName: LY_TOKEN # cookie名称
+    app:
+      id: 7 # 服务id
+      secret: ${spring.application.name} # 服务密钥，默认是服务的名称
+      headerName: privilege_token
   filter:
     allowPaths:
       - /api/auth/login
-      - /api/search
+      - /api/search/page
+      - /api/search/filter
       - /api/user/register
       - /api/user/check
       - /api/user/code

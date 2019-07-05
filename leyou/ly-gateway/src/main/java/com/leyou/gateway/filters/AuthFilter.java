@@ -56,7 +56,6 @@ public class AuthFilter extends ZuulFilter {
 //        获取request
         HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
         String requestURI = request.getRequestURI();
-        System.out.println(requestURI);
         return !isAllowPath(requestURI);
 //        return false;
     }
@@ -98,6 +97,7 @@ public class AuthFilter extends ZuulFilter {
         } catch (RuntimeException e) {
             // 拦截请求
             context.setSendZuulResponse(false);
+
             context.setResponseStatusCode(401);
         }
 

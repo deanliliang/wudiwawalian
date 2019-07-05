@@ -3,8 +3,23 @@ server:
 spring:
   application:
     name: auth-service
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/leyou?allowMultiQueries=true
+    username: root
+    password: root
   redis:
     host: 192.168.88.134
+mybatis:
+  type-aliases-package: com.leyou.auth.bean
+  mapper-locations: mappers/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    com.leyou: trace
+mapper:
+  wrap-keyword: "`{0}`"
 eureka:
   client:
     service-url:
@@ -21,6 +36,11 @@ ly:
       cookieName: LY_TOKEN # cookie名称
       cookieDomain: leyou.com # cookie的域
       minRefreshInterval: 600000 # 刷新的最小时间毫秒，10分钟
+    app:
+      expire: 1500 #过期时间 单位分钟
+      id: 10 # auth服务的id
+      secret: ${spring.application.name} # auth服务的密钥，默认也是服务名称
+      headerName: privilege_token
   encoder:
     crypt:
       secret: ${random.uuid}

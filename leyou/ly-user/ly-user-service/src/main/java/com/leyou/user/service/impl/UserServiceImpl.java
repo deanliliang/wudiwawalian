@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import static com.leyou.constants.MQConstants.Exchange.SMS_EXCHANGE_NAME;
 import static com.leyou.constants.MQConstants.RoutingKey.VERIFY_CODE_KEY;
 
@@ -66,7 +65,6 @@ public class UserServiceImpl implements UserService {
         }
 //        查询数据库是否有数据 有数据返回false 不可注册
         int count = userMapper.selectCount(user);
-
         return count == 0;
     }
 
@@ -133,14 +131,15 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 查询用户
+     *
      * @param username
      * @param password
      * @return
      */
     @Override
-    public UserDTO queryUser(String username, String password) {
+    public UserDTO queryUserByUsernameAndPassword(String username, String password) {
         User user1 = new User();
-//        先按照用户名先查询 查询到再去匹配密码
+//      先按照用户名先查询 查询到再去匹配密码
         user1.setUsername(username);
         User selectOne = userMapper.selectOne(user1);
         if (selectOne == null) {

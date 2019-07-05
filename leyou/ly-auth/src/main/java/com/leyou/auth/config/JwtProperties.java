@@ -40,6 +40,29 @@ public class JwtProperties implements InitializingBean {
     private PublicKey publicKey;
     private PrivateKey privateKey;
 
+    private AppTokenProperties app = new AppTokenProperties();
+
+    @Data
+    public class AppTokenProperties{
+        /**
+         * token过期时长
+         */
+        private int expire;
+        /**
+         * id
+         */
+        private Long id;
+        /**
+         * 密码
+         */
+        private String secret;
+        /**
+         * 存放服务认证的请求头
+         */
+        private String headerName;
+
+    }
+
     @Data
     public class UserTokenProperties {
         /**
@@ -58,6 +81,8 @@ public class JwtProperties implements InitializingBean {
          * 最小刷新时间
          */
         private long minRefreshInterval;
+
+
     }
 
     @Override
@@ -67,8 +92,8 @@ public class JwtProperties implements InitializingBean {
             this.publicKey = RsaUtils.getPublicKey(pubKeyPath);
             this.privateKey = RsaUtils.getPrivateKey(priKeyPath);
         } catch (Exception e) {
-            log.error("初始化公钥和私钥失败！", e);
-            throw new RuntimeException("加载公钥和私钥异常.", e);
+            log.error("加载公钥和私钥异常！", e);
+            throw new RuntimeException(e);
         }
     }
 }

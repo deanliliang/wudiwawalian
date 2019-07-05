@@ -13,13 +13,16 @@ import com.leyou.mappers.SpuDetailMapper;
 import com.leyou.mappers.SpuGoodsMapper;
 import com.leyou.service.GoodsService;
 import com.leyou.utils.BeanHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
+
 import java.util.List;
+
 import static com.leyou.constants.MQConstants.Exchange.ITEM_EXCHANGE_NAME;
 import static com.leyou.constants.MQConstants.RoutingKey.ITEM_DOWN_KEY;
 import static com.leyou.constants.MQConstants.RoutingKey.ITEM_UP_KEY;
@@ -34,6 +37,7 @@ import static com.leyou.constants.MQConstants.RoutingKey.ITEM_UP_KEY;
  * @Version: 1.0
  */
 @Service
+@Slf4j
 public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
@@ -308,4 +312,20 @@ public class GoodsServiceImpl implements GoodsService {
         return skuMapper.insertSkuList(skuList);
     }
 
+    /**
+     * 根据ids查询商品
+     * @param ids
+     * @return
+     */
+    @Override
+    public List<SkuDTO> querySkuByIds(List<Long> ids) {
+        if (ids==null){
+            throw new LyException(ExceptionEnum.INVALID_PARAM_ERROR);
+        }
+        List<Sku> skuList = skuMapper.selectByIdList(ids);
+        if (skuList.size()!=ids.size()){
+            log.info("sku查询数量有误");
+        }
+        return BeanHelper.copyWithCollection(skuList,SkuDTO.class);
+    }
 }

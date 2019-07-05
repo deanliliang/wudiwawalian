@@ -29,7 +29,6 @@ public class AuthController {
                                       @RequestParam("password")String password,
                                       HttpServletResponse response){
 
-        System.out.println(1);
         authService.login(username,password,response);
         return ResponseEntity.ok().build();
     }
@@ -55,5 +54,16 @@ public class AuthController {
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response){
         authService.logout(request,response);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 微服务认证并申请令牌
+     * @param id 服务的id
+     * @param secret 密码
+     * @return
+     */
+    @GetMapping("/authorization")
+    public ResponseEntity<String> authServiceByAppInfo(@RequestParam("id") Long id, @RequestParam("secret") String secret){
+        return ResponseEntity.ok(authService.authServiceByAppInfo(id,secret));
     }
 }

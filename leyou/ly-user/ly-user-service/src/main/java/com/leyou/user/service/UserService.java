@@ -34,7 +34,11 @@ public interface UserService {
      */
     void saveUser(User user, String code);
 
-
-
-    UserDTO queryUser(String username, String password);
+    /**
+     * 查询用户
+     * @param username
+     * @param password
+     * @return
+     */
+    UserDTO queryUserByUsernameAndPassword(String username, String password);
 }

@@ -6,6 +6,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @ProjectName: leyou
@@ -17,9 +19,11 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
  * @Version: 1.0
  */
 
+@EnableScheduling
 @SpringCloudApplication
 @EnableZuulProxy
 @EnableConfigurationProperties({JwtProperties.class, FilterProperties.class})
+@EnableFeignClients
 public class LyGateway {
     public static void main(String[] args) {
 

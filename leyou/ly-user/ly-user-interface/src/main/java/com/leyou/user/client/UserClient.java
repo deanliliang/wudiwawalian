@@ -16,7 +16,7 @@ public interface UserClient {
      * @param password
      * @return
      */
-    @GetMapping("query")
+    @GetMapping("/query")
     UserDTO queryUserByUsernameAndPassword(@RequestParam("username")String username,
                                            @RequestParam("password")String password);
 }

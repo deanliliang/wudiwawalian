@@ -59,4 +59,6 @@ public interface GoodsService {
      * @return
      */
     SpuDTO queryGoodsById(Long id);
+
+    List<SkuDTO> querySkuByIds(List<Long> ids);
 }

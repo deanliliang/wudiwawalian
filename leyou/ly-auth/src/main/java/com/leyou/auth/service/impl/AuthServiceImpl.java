@@ -1,10 +1,13 @@
 package com.leyou.auth.service.impl;
 
+import com.leyou.auth.bean.ApplicationInfo;
 import com.leyou.auth.bean.Payload;
 import com.leyou.auth.bean.UserInfo;
 import com.leyou.auth.config.JwtProperties;
+import com.leyou.auth.mappers.ApplicationInfoMapper;
 import com.leyou.auth.service.AuthService;
 import com.leyou.auth.utils.JwtUtils;
+import com.leyou.bean.AppInfo;
 import com.leyou.enums.ExceptionEnum;
 import com.leyou.exception.LyException;
 import com.leyou.user.client.UserClient;
@@ -13,10 +16,11 @@ import com.leyou.utils.CookieUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -140,5 +144,46 @@ public class AuthServiceImpl implements AuthService {
         redisTemplate.opsForValue().set(payloadId, "", time, TimeUnit.MILLISECONDS);
 //        删除cookie
         CookieUtils.deleteCookie(prop.getUser().getCookieName(), prop.getUser().getCookieDomain(), response);
+    }
+
+
+    @Autowired
+    private ApplicationInfoMapper infoMapper;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordConfig;
+
+    /**
+     * 微服务认证并申请令牌
+     *
+     * @param id
+     * @param secret
+     * @return
+     */
+    @Override
+    public String authServiceByAppInfo(Long id, String secret) {
+//        根据id查询appinfo
+        ApplicationInfo applicationInfo = infoMapper.selectByPrimaryKey(id);
+        if (applicationInfo == null) {
+            throw new LyException(ExceptionEnum.INVALID_PARAM_ERROR);
+        }
+//        验证密码
+        boolean matches = passwordConfig.matches(secret, applicationInfo.getSecret());
+        if (!matches) {
+            throw new LyException(ExceptionEnum.INVALID_USERNAME_PASSWORD);
+        }
+
+//        查询服务权限集合信息
+        List<Long> longs = infoMapper.queryTargetIdListByAppId(id);
+//        封装info信息
+        AppInfo appInfo = new AppInfo();
+        appInfo.setId(id);
+        appInfo.setServiceName(applicationInfo.getServiceName());
+        appInfo.setTargetList(longs);
+
+//        生成jwt
+        String token = JwtUtils.generateTokenExpireInMinutes(appInfo, prop.getPrivateKey(), prop.getApp().getExpire());
+
+        return token;
     }
 }

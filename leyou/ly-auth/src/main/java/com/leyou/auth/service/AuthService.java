@@ -22,4 +22,6 @@ public interface AuthService {
     UserInfo getVerify(HttpServletRequest request, HttpServletResponse response);
 
     void logout(HttpServletRequest request, HttpServletResponse response);
+
+    String authServiceByAppInfo(Long id, String secret);
 }
